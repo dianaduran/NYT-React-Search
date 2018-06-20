@@ -1,0 +1,30 @@
+{
+  "name": "nyt-react-search",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "nodemon server.js",
+    "start": "concurrently \"nodemon server.js\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dianaduran/NYT-React-Search.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dianaduran/NYT-React-Search/issues"
+  },
+  "devDependencies": {
+    "concurrently": "^3.6.0"
+  },
+  "homepage": "https://github.com/dianaduran/NYT-React-Search#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mongoose": "^5.1.6",
+    "nodemon": "^1.17.5"
+  }
+}
