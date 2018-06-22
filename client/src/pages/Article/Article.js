@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
 import { Input, FormBtn } from "../../components/Form";
+import DeleteBtn from "../../components/DeleteBtn";
 import "./article.css";
 
 class Articles extends Component {
@@ -16,30 +17,41 @@ class Articles extends Component {
   };
 
 
+//function is working when the page is loaded
+  componentDidMount() {
+    this.loadArticles();
+  }
 
-  // componentDidMount() {
-  //   this.loadArticles();
-  // }
-
+  //get articles from the DB
   loadArticles = () => {
     API.getArticles()
       .then(res =>
-        this.setState({ saved: res.data}),
-        console.log("saved: "+this.state.saved)
-        )
+        this.setState({ saved: res.data, topic:"", start:"", end:""}),
+      )
       .catch(err => console.log(err));
   };
 
-  saveArticle = (id) => {
-    const findArticleByID = this.state.articles.find((art) => art._id === id);
-    //console.log("findArticleByID: ", findArticleByID);
-    const newSave = {title: findArticleByID.headline.main, date: findArticleByID.pub_date, url: findArticleByID.web_url};
-    console.log("newSave: "+newSave);
-    API.saveArticle(newSave)
-       .then(this.loadArticles());
+  //save article into the DB firt check if it already exist in the DB
+  saveArticle = (id, url) => {  
+    this.loadArticles();
+    const findArticleByUrl = this.state.saved.find((art) => art.url === url);
    
+   //find article by url in the DB
+    if(findArticleByUrl===undefined){
+      const findArticleByID = this.state.articles.find((art) => art._id === id);
+      //console.log("findArticleByID: ", findArticleByID);
+      const newSave = {title: findArticleByID.headline.main, date: findArticleByID.pub_date, url: findArticleByID.web_url};
+      console.log("newSave: "+newSave.url);
+      API.saveArticle(newSave)
+         .then(this.loadArticles());
+    }
+    //is already in the DB
+    else{
+      alert("This Article is already saved!!");
+    }   
   };
 
+  //work with the input 
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
@@ -47,6 +59,7 @@ class Articles extends Component {
     });
   };
 
+  //Get data from the API
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.topic && this.state.start && this.state.end) {     
@@ -55,6 +68,13 @@ class Articles extends Component {
        console.log("this.state.articles: ", this.state.articles))
       .catch(err => console.log(err));
     }
+  };
+
+  //delete article from the DB
+  deleteArticle = id => {
+    API.deleteArticle(id)
+      .then(res => this.loadArticles())
+      .catch(err => console.log(err));
   };
 
   render() {
@@ -104,7 +124,7 @@ class Articles extends Component {
                 {this.state.articles.map(article => (
                   <ListItem key={article._id}>
                     <p>{article.snippet}</p>                   
-                    <button className="btn btn-secondary" onClick={() => this.saveArticle(article._id )}>
+                    <button className="btn btn-secondary" onClick={() => this.saveArticle(article._id , article.web_url)}>
                       Save
                     </button>
                   </ListItem>
@@ -113,13 +133,27 @@ class Articles extends Component {
             ) : (
               <h3>No Results to Display</h3>
             )}
-
-
           </div>
           </Col>
           <Col size="md-12">
           <div className="ColDiv">
           <h1>---Saved Articles---</h1>
+          {this.state.saved.length ? (
+              <List>
+                {this.state.saved.map(article => (
+                  <ListItem key={article._id}>
+                    <Link to={"/article/" + article._id}>
+                      <strong>
+                        {article.title}
+                      </strong>
+                    </Link>
+                    <DeleteBtn onClick={() => this.deleteArticle(article._id)} />
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              <h3>No Results to Display</h3>
+            )}
            </div>
           </Col>
         </Row>

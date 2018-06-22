@@ -14,11 +14,13 @@ const api= {
   saveArticle: function(articleObj) {
     return axios.post("/api/articles", articleObj);
   },
-  //Gets articles from the API
+
+   //Gets articles from the API
   getRecipes: function(topic, startYear, endYear) {
     const authKey = "987a6b86ec174fc9acebed6162976797";
     const queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" +
-    authKey + "&q=" + topic + "&begin_date=" + startYear + "&end_date=" + endYear;
+    authKey + "&q=" + topic + "&begin_date=" + startYear + "&end_date=" + endYear + "?page=5";
+    console.log(queryURL);
     return axios.get(queryURL);
   },  
  
