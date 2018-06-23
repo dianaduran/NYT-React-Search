@@ -17,9 +17,7 @@ if (process.env.NODE_ENV === "production") {
 var articlesController = require("./controllers/articlesController")(app);
 var router = new express.Router();
 
-router.get("/*", function(req, res) {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
+
 
 // Add routes, both API and view
 app.use(router);

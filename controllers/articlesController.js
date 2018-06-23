@@ -1,4 +1,5 @@
 const Article = require("../models/Article");
+const path = require("path");
 
 // Defining methods for the articlesController
 module.exports=(app) => {
@@ -28,5 +29,10 @@ app.post("/api/articles", function (req, res){
     .then(dbModel => res.json(dbModel))
     .catch(err => res.status(422).json(err));
 }); 
+
+app.get("/*", function(req, res) {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
 
 };
