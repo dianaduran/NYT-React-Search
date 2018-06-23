@@ -8,21 +8,6 @@ const PORT = process.env.PORT || 3001;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-
-// Connect mongoose to our database
-const db = process.env.MONGODB_URI || "mongodb://localhost/nytreact";
-mongoose.connect(db, function(error) {
-  // Log any errors connecting with mongoose
-  if (error) {
-    console.error(error);
-  }
-  // Or log a success message
-  else {
-    console.log("mongoose connection is successful");
-  }
-});
-
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
@@ -40,8 +25,18 @@ router.get("/*", function(req, res) {
 app.use(router);
 
 
-
-
+// Connect mongoose to our database
+const db = process.env.MONGODB_URI || "mongodb://localhost/nytreact";
+mongoose.connect(db, function(error) {
+  // Log any errors connecting with mongoose
+  if (error) {
+    console.error(error);
+  }
+  // Or log a success message
+  else {
+    console.log("mongoose connection is successful");
+  }
+});
 
 // Start the API server
 app.listen(PORT, function() {
