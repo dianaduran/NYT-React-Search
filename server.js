@@ -7,10 +7,7 @@ const PORT = process.env.PORT || 3001;
 // Define middleware here
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// Serve up static assets (usually on heroku)
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
+
 
 
 // Connect mongoose to our database
@@ -25,6 +22,11 @@ mongoose.connect(db, function(error) {
     console.log("mongoose connection is successful");
   }
 });
+
+// Serve up static assets (usually on heroku)
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
 // Routing
 var articlesController = require("./controllers/articlesController")(app);
