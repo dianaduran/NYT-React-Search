@@ -64,8 +64,9 @@ class Articles extends Component {
     event.preventDefault();
     if (this.state.topic && this.state.start && this.state.end) {     
       API.getRecipes(this.state.topic, this.state.start, this.state.end)
-      .then(res => this.setState({ articles: res.data.response.docs }),
-       console.log("this.state.articles: ", this.state.articles))
+      //slice is because is supouse get just 5 elements
+      .then(res =>this.setState({ articles: res.data.response.docs.slice(0,5) }),
+       console.log("articles saved in articles array"))
       .catch(err => console.log(err));
     }
   };
