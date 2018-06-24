@@ -14,16 +14,20 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
+
+
 // Routing
 var articlesController = require("./controllers/articlesController")(app);
 var router = new express.Router();
 
-router.get("*", function(req, res) {
-  res.sendFile(path.join(__dirname, "client/build/index.html"));
-});
-
 // Add routes, both API and view
 app.use(router);
+
+router.get("*", function(req, res) {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
+
+
 
 
 // Connect mongoose to our database
